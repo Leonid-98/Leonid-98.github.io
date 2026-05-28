@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <title>Hello</title> -->
   <style>
     * {
       box-sizing: border-box;
@@ -18,14 +17,110 @@
       background: #ffffff;
     }
 
-    img {
+    .content {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      width: min(100%, 700px);
+    }
+
+    .birthday-gif {
       display: block;
       width: min(100%, 520px);
       height: auto;
     }
+
+    .click-text {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #222222;
+      cursor: pointer;
+      font: 14px/1.4 Arial, sans-serif;
+      text-align: center;
+    }
+
+    .click-text:focus-visible {
+      outline: 2px solid #222222;
+      outline-offset: 6px;
+    }
+
+    .spider-overlay {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+      z-index: 10;
+    }
+
+    .spider-overlay.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .warning-text {
+      position: fixed;
+      top: max(24px, env(safe-area-inset-top));
+      left: 50%;
+      z-index: 12;
+      width: min(90vw, 720px);
+      margin: 0;
+      color: #ffefef;
+      font: 700 clamp(28px, 9vw, 72px)/1.05 Arial, sans-serif;
+      text-align: center;
+      text-shadow: 0 3px 14px rgba(0, 0, 0, 0.85);
+      transform: translateX(-50%);
+    }
+
+    .spider-image {
+      display: block;
+      width: min(44vmin, 240px);
+      height: auto;
+      max-width: none;
+      animation: spider-grow 1.8s ease-in-out infinite;
+      transform-origin: center;
+      will-change: transform;
+    }
+
+    @keyframes spider-grow {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(7);
+      }
+    }
   </style>
 </head>
 <body>
-  <img src="happy-bd.gif" alt="Hello">
+  <main class="content">
+    <img class="birthday-gif" src="happy-bd.gif" alt="Hello">
+    <button class="click-text" type="button" aria-controls="spiderOverlay">
+      Не кликай сюда, Катя
+    </button>
+  </main>
+
+  <div class="spider-overlay" id="spiderOverlay" aria-hidden="true">
+    <p class="warning-text">Я предупреждал</p>
+    <img class="spider-image" src="spider.jpeg" alt="">
+  </div>
+
+  <script>
+    const clickText = document.querySelector('.click-text');
+    const overlay = document.querySelector('#spiderOverlay');
+
+    clickText.addEventListener('click', () => {
+      overlay.classList.add('is-active');
+      overlay.setAttribute('aria-hidden', 'false');
+    });
+  </script>
 </body>
 </html>
